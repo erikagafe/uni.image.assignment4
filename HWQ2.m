@@ -3,23 +3,34 @@ function [out]=HWQ2()
     clc; home;
     close all hidden
 
-    Df1 = fourier('trainingB.png', 24);
-    train = Df1{1};
-   
-    Df2 = fourier('test2B.jpg', 24);
-    %Dfs3 = fourier('test1B.jpg', 24)
+    %Fourier descriptors for all images.
+     [Df1, bound1] = fourier('trainingB.png', 24);
+     [Df2, bound2] = fourier('test2B.jpg', 24);
+     [Df3, bound3] = fourier('test1B.jpg', 24);
     
-    [test] = compare(train, Df2, 1)
+    %Comparing the training image with the other 2 images
+    [test1] = compare(Df1, Df2, 0.6);
+    [test] = compare(Df1, Df3, 0.6);
     
-   % Df2(test(1))
-    
-    B = bwboundaries(Df2(test(1)));
-%     imshow('test2B.jpg');
-%     hold on
-%     for k = 1:length(B)
-%         boundary = B{k};
-%         plot(boundary(:,2), boundary(:,1), 'r', 'LineWidth', 10);
-%     end
+    %Print the plot to the identified boundery in Test2B.jpg
+    subplot(2,1,1);
+    imshow('test2B.jpg');
+    hold on
+    [a, b] = size(test1);
+    for k = 1:b
+        boundary = bound2{test1(k)};
+        plot(boundary(:,2), boundary(:,1), 'b', 'LineWidth', 2);
+    end
+
+    %Print the plot to the identified boundery in Test1B.jpg
+    subplot(2,1,2);
+    imshow('test1B.jpg');
+    hold on
+    [a, b] = size(test);
+    for k = 1:b
+        boundary = bound3{test(k)};
+        plot(boundary(:,2), boundary(:,1), 'b', 'LineWidth', 5);
+    end
 
 end
 

@@ -1,26 +1,23 @@
 
-function [Dfs] = fourier(Image, n) 
+function [Dfs, Boundaries] = fourier(Image, n) 
+    clc; home;
+    close all hidden
+
     %A
     Img = imread(Image);
     I = (uint8(mean(Img, 3)));
     K = mat2gray(I);
-%     imshow(K)
     
     %B
     level = graythresh(K);
     BW = im2bw(K,level);
-    subplot(2,3,1);
-    imshowpair(K,BW,'montage'), title(level);
 
     %C
     B = bwboundaries(BW);
-    subplot(2,3,2);
-    imshow(BW)
-    hold on
     Dfs = {};
+    Boundaries = {};
     for k = 1:length(B)
         boundary = B{k};
-        plot(boundary(:,2), boundary(:,1), 'g', 'LineWidth', 2)
         D = boundary(:,2)+ j * boundary(:,1);
         Df = fft(D);
         [a, b] = size(Df);
@@ -34,7 +31,7 @@ function [Dfs] = fourier(Image, n)
             Df = abs(Df);
             % collect
             Dfs{end+1} = Df;
+            Boundaries{end+1} = boundary;
         end
     end
- 
 end
